@@ -1,0 +1,22 @@
+{
+  "name": "ys-cli",
+  "version": "1.0.23",
+  "description": "ys command line tool",
+  "main": "index.js",
+  "bin": {
+    "ys": "./bin/ys.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:yskit/ys-cli.git"
+  },
+  "dependencies": {
+    "cmdu": "^2.0.10",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.1.0",
+    "node-version-compare": "^1.0.1",
+    "request": "^2.85.0",
+    "ys-dbo": "^1.0.1",
+    "ys-utils": "^1.0.10"
+  }
+}
