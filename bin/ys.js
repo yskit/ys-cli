@@ -49,8 +49,8 @@ util.update(app.version, () => {
         for (const plugin in PluginExports) {
           const PluginPackageName = PluginExports[plugin].package;
           const PluginPathName = PluginExports[plugin].path;
-          const commandPackagePath = PluginPackageName ? path.resolve(root, 'node_modules', PluginPackageName, 'command.plugin.js') : null;
-          const commandPathPath = PluginPathName ? path.resolve(root, PluginPathName, 'command.plugin.js') : null;
+          const commandPackagePath = PluginPackageName ? path.resolve(root, 'node_modules', PluginPackageName, 'ys.command.js') : null;
+          const commandPathPath = PluginPathName ? path.resolve(root, PluginPathName, 'ys.command.js') : null;
           let commandPath;
           if (PluginPathName && fs.existsSync(commandPathPath)) {
             commandPath = commandPathPath;

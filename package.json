@@ -1,6 +1,6 @@
 {
   "name": "ys-cli",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "ys command line tool",
   "main": "index.js",
   "bin": {
