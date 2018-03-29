@@ -2,79 +2,63 @@
 
 'use strict';
 
-const fs = require('fs');
-const app = require('cmdu');
-const path = require('path');
-const util = require('../lib/utils');
-const utils = require('ys-utils');
-const log = require('../lib/log');
-const packageData = require('../package.json');
-const env = process.env;
+const Installer = require('../src/installer');
+const installer = new Installer();
 
-app.version = packageData.version;
-app.language = env.language || 'zh-CN';
+installer.checkInstallize(err => {
+  if (err) {
+    installer.spinner.error(err.message);
+    return installer.close(() => process.exit(1));
+  }
 
-util.update(app.version, () => {
-  const root = util.findRootPath(process.cwd());
+  installer.spinner.info('正在加载命令 ...');
 
-  app.command('registry <url>')
-    .describe('使用源地址')
-    .action('../lib/registry');
-  app.command('delay <time>')
-    .describe('检测版本更新时间间隔，单位（天）')
-    .action('../lib/delay');
-
-  if (root) {
+  // 框架和插件共有命令
+  installer.switcher('framework', 'plugin', app => {
     app.command('add <name>')
       .option('-c, --controller', '安装一个`controller`模块')
       .option('-m, --middleware', '安装一个`middleware`模块')
       .option('-s, --service', '安装一个`service`模块')
       .describe('添加开发文件')
-      .action((name, options) => require('../lib/addone')(name, options, root));
+      .action(installer.task('../src/add/index'));
+  });
 
+  installer.switcher('framework', app => {
     app.command('install <name>')
       .alias('i')
       .describe('安装一个插件')
-      .action(name => require('../lib/addone/plugin')(name, root));
+      .action(installer.task('../src/install/index'));
 
-    app.command('uninstall <name>')
+    app.command('uninstall [name]')
       .alias('d')
       .describe('卸载一个插件')
-      .action(name => require('../lib/addone/plugin/uninstall')(name, root));
-    
-    const projectConfigPluginPath = path.resolve(root, 'config/plugin.js');
-    if (fs.existsSync(projectConfigPluginPath)) {
-      const PluginExports = utils.file.load(projectConfigPluginPath);
-      if (PluginExports) {
-        for (const plugin in PluginExports) {
-          const PluginPackageName = PluginExports[plugin].package;
-          const PluginPathName = PluginExports[plugin].path;
-          const commandPackagePath = PluginPackageName ? path.resolve(root, 'node_modules', PluginPackageName, 'ys.command.js') : null;
-          const commandPathPath = PluginPathName ? path.resolve(root, PluginPathName, 'ys.command.js') : null;
-          let commandPath;
-          if (PluginPathName && fs.existsSync(commandPathPath)) {
-            commandPath = commandPathPath;
-          } else if (PluginPackageName && fs.existsSync(commandPackagePath)) {
-            commandPath = commandPackagePath;
-          }
-          if (commandPath) {
-            const commandExports = utils.file.load(commandPath);
-            if (commandExports && typeof commandExports.command === 'function') {
-              commandExports.command({ app, log, root });
-            }
-          }
-        }
-      }
-    }
-  } else {
-    app.command('new <project>')
-      .describe('创建一个新项目')
-      .action('../lib/create');
-      
-    app.command('create <name>')
-      .describe('创建一个开发插件')
-      .action('../lib/addone/plugin/create');
-  }
+      .action(installer.task('../src/uninstall/index'));
+  });
 
-  app.listen();
+  /**
+   * 外部命令
+   * @command ys new <name> 创建新的项目
+   * @command ys create <name> 创建新的插件
+   */
+  installer.switcher('noop', app => {
+    app.command('new <name>')
+      .describe('创建一个新项目')
+      .action(installer.task('../src/new/index'));
+    app.command('create <name>')
+      .describe('创建一个新的插件')
+      .action(installer.task('../src/create/index'));
+  });
+
+  /**
+   * 通用命令
+   * @option -R, --registry [url] 修改NPM源地址
+   * @option -T, --delay [time] 延迟检测时间
+   */
+  installer.switcher(app => {
+    app.command('*')
+      .describe('默认操作')
+      .option('-R, --registry [url]', '修改NPM源地址')
+      .option('-T, --delay [time]', '延迟检测时间', Number)
+      .action(installer.task('../src/index'));
+  });
 });

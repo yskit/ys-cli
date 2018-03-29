@@ -11,12 +11,16 @@
     "url": "git+ssh://git@github.com:yskit/ys-cli.git"
   },
   "dependencies": {
-    "cmdu": "^2.0.10",
+    "cmdu": "^2.0.11",
     "fs-extra": "^5.0.0",
-    "inquirer": "^5.1.0",
+    "inquirer": "^5.2.0",
+    "is-type-of": "^1.2.0",
+    "js-beautify": "^1.7.5",
     "node-version-compare": "^1.0.1",
     "request": "^2.85.0",
-    "ys-dbo": "^1.0.1",
-    "ys-utils": "^1.0.10"
+    "ys-cli-package": "^1.0.5",
+    "ys-dbo": "^1.0.4",
+    "ys-spinner": "^1.0.4",
+    "ys-utils": "^1.0.18"
   }
 }
