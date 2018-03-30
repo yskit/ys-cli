@@ -3,6 +3,7 @@ const path = require('path');
 const util = require('ys-utils');
 const dialog = require('inquirer');
 const Create = require('ys-cli-package');
+const installModule = require('../install');
 const {
   getSubjectKey,
   whichFrameworker,
@@ -191,6 +192,11 @@ module.exports = class CreateNewProject {
       '--save',
       '--registry=' + this.installer.registry
     );
+
+    this.installer.root = path.resolve(process.cwd(), name);
+    this.installer.type = 'framework';
+    const ins = new installModule(this.thread, this.installer);
+    await ins.render(router);
 
     this.installer.spinner.success('恭喜您，项目', name, '安装成功！');
   }
