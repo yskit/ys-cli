@@ -81,26 +81,29 @@ installer.checkInstallize(err => {
           const item = PluginListExports[key];
           const pluginPath = item.path;
           const pluginPackage = item.package;
-          let itemCommandExports;
+          let itemCommandPath;
 
           if (pluginPath) {
-            itemCommandExports = util.file.load(path.resolve(installer.root, pluginPath, '.ys.command.js'));
+            itemCommandPath = path.resolve(installer.root, pluginPath, '.ys.command.js');
           } else if (pluginPackage) {
-            itemCommandExports = util.file.load(path.resolve(installer.root, 'node_modules', pluginPackage, '.ys.command.js'));
+            itemCommandPath = path.resolve(installer.root, 'node_modules', pluginPackage, '.ys.command.js');
           }
 
-          if (itemCommandExports) {
-            if (itemCommandExports['command:framework']) {
-              installer.switcher('framework', app => itemCommandExports['command:framework'](app, installer));
-            }
-            if (itemCommandExports['command:plugin']) {
-              installer.switcher('plugin', app => itemCommandExports['command:plugin'](app, installer));
-            }
-            if (itemCommandExports['command:noop']) {
-              installer.switcher('noop', app => itemCommandExports['command:noop'](app, installer));
-            }
-            if (itemCommandExports['command:common']) {
-              installer.switcher(app => itemCommandExports['command:common'](app, installer));
+          if (itemCommandPath && fs.existsSync(itemCommandPath)) {
+            const itemCommandExports = util.file.load(itemCommandPath);
+            if (itemCommandExports) {
+              if (itemCommandExports['command:framework']) {
+                installer.switcher('framework', app => itemCommandExports['command:framework'](app, installer));
+              }
+              if (itemCommandExports['command:plugin']) {
+                installer.switcher('plugin', app => itemCommandExports['command:plugin'](app, installer));
+              }
+              if (itemCommandExports['command:noop']) {
+                installer.switcher('noop', app => itemCommandExports['command:noop'](app, installer));
+              }
+              if (itemCommandExports['command:common']) {
+                installer.switcher(app => itemCommandExports['command:common'](app, installer));
+              }
             }
           }
         }
