@@ -52,7 +52,7 @@ module.exports = class InstallModule {
       throw new Error('非项目目录无法使用此命令');
     }
 
-    if (!/^ys-pg-/.test(name)) {
+    if (!/^ys-pg-/.test(name) && !/^@/.test(name)) {
       name = 'ys-pg-' + name;
     }
 
@@ -79,6 +79,11 @@ module.exports = class InstallModule {
     const modulePath = path.resolve(cwd, 'node_modules', name);
     if (!fs.existsSync(modulePath)) {
       this.installer.spinner.warn('正在安装插件 ...');
+      console.log(cwd, 
+        'npm', 'i', 
+        name, 
+        '--save',
+        '--registry=' + this.installer.registry)
       await this.installer.execScript(
         cwd, 
         'npm', 'i', 
