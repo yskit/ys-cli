@@ -11,6 +11,7 @@
     "url": "git+ssh://git@github.com:yskit/ys-cli.git"
   },
   "dependencies": {
+    "async-events-listener": "^1.0.2",
     "cmdu": "^2.0.11",
     "fs-extra": "^5.0.0",
     "inquirer": "^5.2.0",
@@ -19,8 +20,8 @@
     "node-version-compare": "^1.0.1",
     "request": "^2.85.0",
     "ys-cli-package": "^1.0.9",
-    "ys-dbo": "^1.0.4",
+    "ys-dbo": "^1.0.5",
     "ys-spinner": "^1.0.4",
-    "ys-utils": "^1.0.18"
+    "ys-utils": "^1.0.22"
   }
 }

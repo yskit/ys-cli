@@ -174,12 +174,8 @@ module.exports = class Installizer {
       }
     }
     return function dispatch(...args) {
-      new dbo().until(async way => {
-        way.on('afterEnd', async () => {
-          await new Promise(resolve => that.close(resolve));
-          process.exit(0)
-        });
-
+      const object = new dbo();
+      object.until(async way => {
         if (is.class(CallbackExports)) {
           const target = new CallbackExports(way, that);
           if (typeof target.render === 'function') {
@@ -191,8 +187,13 @@ module.exports = class Installizer {
       }, {
         error(err) {
           that.spinner.error(err.message);
-          return new Promise(resolve => that.close(resolve));
         }
+      })
+      .then(() => that.close(() => process.exit(0)))
+      .catch(e => {
+        that.spinner.error(e.message);
+        console.log(e)
+        that.close(() => process.exit(1))
       });
     }
   }

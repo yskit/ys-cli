@@ -79,11 +79,6 @@ module.exports = class InstallModule {
     const modulePath = path.resolve(cwd, 'node_modules', name);
     if (!fs.existsSync(modulePath)) {
       this.installer.spinner.warn('正在安装插件 ...');
-      console.log(cwd, 
-        'npm', 'i', 
-        name, 
-        '--save',
-        '--registry=' + this.installer.registry)
       await this.installer.execScript(
         cwd, 
         'npm', 'i', 
