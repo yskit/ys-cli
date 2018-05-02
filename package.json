@@ -1,6 +1,6 @@
 {
   "name": "ys-cli",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "ys command line tool",
   "main": "index.js",
   "bin": {
@@ -19,9 +19,9 @@
     "js-beautify": "^1.7.5",
     "node-version-compare": "^1.0.1",
     "request": "^2.85.0",
-    "ys-cli-package": "^1.0.9",
-    "ys-dbo": "^1.0.5",
+    "ys-cli-package": "^1.0.10",
+    "ys-dbo": "^1.0.7",
     "ys-spinner": "^1.0.4",
-    "ys-utils": "^1.0.22"
+    "ys-utils": "^1.0.25"
   }
 }
