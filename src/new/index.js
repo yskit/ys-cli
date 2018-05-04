@@ -160,7 +160,10 @@ module.exports = class CreateNewProject {
     this.create({
       type: 'framework',
       file: 'controller.js',
-      output: path.resolve(projectDirPath, 'app/controller/index.js')
+      output: path.resolve(projectDirPath, 'app/controller/index.js'),
+      data: {
+        name: 'default'
+      }
     });
 
     this.create({
